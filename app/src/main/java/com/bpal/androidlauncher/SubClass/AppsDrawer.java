@@ -1,4 +1,4 @@
-package com.bpal.androidlauncher;
+package com.bpal.androidlauncher.SubClass;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -8,17 +8,16 @@ import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
-import android.icu.text.AlphabeticIndex;
 import android.icu.text.Collator;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
 
 import com.bpal.androidlauncher.Adapters.AppsDrawerAdapter;
-import com.bpal.androidlauncher.Attributes.AppInfo;
+import com.bpal.androidlauncher.Model.AppInfo;
+import com.bpal.androidlauncher.R;
 
 import java.util.ArrayList;
 import java.util.Collections;

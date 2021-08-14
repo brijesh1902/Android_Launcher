@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:background="@color/grey"
     android:padding="5dp"
-    tools:context=".AppsDrawer">
+    tools:context=".SubClass.AppsDrawer">
 
     <EditText
         android:id="@+id/search"

@@ -1,4 +1,4 @@
-package com.bpal.androidlauncher.Attributes;
+package com.bpal.androidlauncher.Constant;
 
 import android.view.View;
 

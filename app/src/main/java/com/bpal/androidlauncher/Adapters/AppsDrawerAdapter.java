@@ -3,23 +3,21 @@ package com.bpal.androidlauncher.Adapters;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.content.pm.ResolveInfo;
 import android.graphics.drawable.Drawable;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.bpal.androidlauncher.Attributes.AppInfo;
-import com.bpal.androidlauncher.Attributes.ItemClickListener;
+import com.bpal.androidlauncher.Constant.Common;
+import com.bpal.androidlauncher.Model.AppInfo;
+import com.bpal.androidlauncher.Constant.ItemClickListener;
 import com.bpal.androidlauncher.R;
+import com.bpal.androidlauncher.SubClass.WindowsAppsActivity;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class AppsDrawerAdapter extends RecyclerView.Adapter<AppsDrawerAdapter.ViewHolder> {
@@ -54,8 +52,8 @@ public class AppsDrawerAdapter extends RecyclerView.Adapter<AppsDrawerAdapter.Vi
         holder.setItemClickListener(new ItemClickListener() {
             @Override
             public void onItemClickListener(View v, int position) {
-                PackageManager packageManager =  context.getPackageManager();
-                Intent intent = packageManager.getLaunchIntentForPackage(appPackage);
+                Common.current_app = data;
+                Intent intent = new Intent(context, WindowsAppsActivity.class);
                 intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 context.startActivity(intent);
             }
