@@ -54,7 +54,9 @@ public class AppsDrawerAdapter extends RecyclerView.Adapter<AppsDrawerAdapter.Vi
             public void onItemClickListener(View v, int position) {
                 Common.current_app = data;
                 Intent intent = new Intent(context, WindowsAppsActivity.class);
-                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                intent.addFlags(Intent.FLAG_ACTIVITY_LAUNCH_ADJACENT|
+                        Intent.FLAG_ACTIVITY_MULTIPLE_TASK|
+                        Intent.FLAG_ACTIVITY_NEW_TASK);
                 context.startActivity(intent);
             }
         });

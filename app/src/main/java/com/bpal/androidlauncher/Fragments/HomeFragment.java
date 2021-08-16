@@ -3,6 +3,7 @@ package com.bpal.androidlauncher.Fragments;
 import android.content.Intent;
 import android.os.Bundle;
 
+import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
 
 import android.view.LayoutInflater;
@@ -17,6 +18,7 @@ import com.bpal.androidlauncher.SubClass.AppsDrawer;
 public class HomeFragment extends Fragment {
 
     ImageView appDrawer;
+    CardView cardView;
 
     public HomeFragment() {
         // Required empty public constructor
@@ -36,7 +38,10 @@ public class HomeFragment extends Fragment {
         try {
             view = inflater.inflate(R.layout.fragment_home, container, false);
 
+            cardView = view.findViewById(R.id.dcard);
             appDrawer = view.findViewById(R.id.icon_drawer);
+
+            cardView.setVisibility(View.VISIBLE);
 
             appDrawer.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -44,6 +49,7 @@ public class HomeFragment extends Fragment {
                     Intent intent = new Intent(getContext(), AppsDrawer.class);
                     intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                     startActivity(intent);
+                    cardView.setVisibility(View.INVISIBLE);
                 }
             });
 

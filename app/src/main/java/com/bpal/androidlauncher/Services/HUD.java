@@ -22,8 +22,10 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bpal.androidlauncher.Constant.Common;
+import com.bpal.androidlauncher.MainActivity;
 import com.bpal.androidlauncher.Model.AppInfo;
 import com.bpal.androidlauncher.R;
+import com.bpal.androidlauncher.SubClass.WindowsAppsActivity;
 
 public class HUD extends Service {
 
@@ -60,6 +62,34 @@ public class HUD extends Service {
         min.setImageResource(R.drawable.ic_minimize_24);
         close.setImageResource(R.drawable.ic_close_24);
 
+        close.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+                intent.addFlags( Intent.FLAG_ACTIVITY_NEW_TASK);
+                startActivity(intent);
+                Log.d("======CLOSE=====", "WORKING");
+                appInfo = null;
+            }
+        });
+
+        min.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+                intent.addFlags( Intent.FLAG_ACTIVITY_NEW_TASK);
+                startActivity(intent);
+                Log.d("======MIN=====", "WORKING");
+            }
+        });
+
+        max.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Log.d("======MAX=====", "WORKING");
+            }
+        });
+
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             LAYOUT_FLAG = WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY;
         } else {
@@ -69,8 +99,8 @@ public class HUD extends Service {
                 WindowManager.LayoutParams.WRAP_CONTENT,
                 WindowManager.LayoutParams.WRAP_CONTENT,
                 LAYOUT_FLAG,
-                WindowManager.LayoutParams.FLAG_LAYOUT_IN_SCREEN,
-                PixelFormat.TRANSPARENT);
+                WindowManager.LayoutParams.FLAG_WATCH_OUTSIDE_TOUCH,
+                PixelFormat.TRANSLUCENT);
         params.gravity = Gravity.TOP | Gravity.RIGHT;
         WindowManager wm = (WindowManager) getSystemService(WINDOW_SERVICE);
         wm.addView(view, params);
