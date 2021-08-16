@@ -15,6 +15,7 @@ import android.app.ActivityOptions;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
+import android.content.pm.LauncherApps;
 import android.content.pm.PackageManager;
 import android.content.res.Configuration;
 import android.graphics.Point;
@@ -55,19 +56,6 @@ public class WindowsAppsActivity extends AppCompatActivity {
     WindowManager windowManager;
     View view;
 
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == 1234) {
-            startService(new Intent(this, HUD.class));
-        }
-    }
-
-    @Override
-    public void onConfigurationChanged(Configuration newConfig) {
-        super.onConfigurationChanged(newConfig);
-        //updateWindowSize();
-    }
 
     @Override
     public void onMultiWindowModeChanged(boolean isInMultiWindowMode) {
@@ -86,6 +74,8 @@ public class WindowsAppsActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_windows_apps);
+
+        //getSupportFragmentManager().beginTransaction().add(R.id.container, new AppViewFragment()).commit();
 
         DisplayManager dm = (DisplayManager) getSystemService(Context.DISPLAY_SERVICE);
         targetDisplay = dm.getDisplay(Display.DEFAULT_DISPLAY);
@@ -120,6 +110,8 @@ public class WindowsAppsActivity extends AppCompatActivity {
         int width = size.x - 20;  // Set your heights
         int height = size.y - 80;
 
+
+
         if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N) {
             PackageManager packageManager = getApplicationContext().getPackageManager();
             Intent i = packageManager.getLaunchIntentForPackage(appInfo.getPackageName().toString());
@@ -132,7 +124,7 @@ public class WindowsAppsActivity extends AppCompatActivity {
                 //startActivity(i, bounds.toBundle());
                 startActivity(i, options.toBundle());
             }
-            //getSupportFragmentManager().beginTransaction().add(R.id.container, new AppViewFragment()).commit();
+
         }
 
 
@@ -147,9 +139,10 @@ public class WindowsAppsActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(getApplicationContext(), MainActivity.class);
-                intent.addFlags( Intent.FLAG_ACTIVITY_NEW_TASK);
+                intent.addFlags( Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 startActivity(intent);
                 windowManager.removeView(view);
+                view = null;
                 Common.showToast(getApplicationContext(), "App Closed.");
                 Log.d("======CLOSE=====", "WORKING");
                 appInfo = null;
@@ -160,7 +153,7 @@ public class WindowsAppsActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(getApplicationContext(), MainActivity.class);
-                intent.addFlags( Intent.FLAG_ACTIVITY_NEW_TASK);
+                intent.addFlags( Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
                 startActivity(intent);
                 Common.showToast(getApplicationContext(), "App Minimised.");
                 Log.d("======MIN=====", "WORKING");
@@ -180,8 +173,6 @@ public class WindowsAppsActivity extends AppCompatActivity {
                         startActivity(i, bounds.toBundle());
                     }
                     Common.showToast(getApplicationContext(), "App Maximised.");
-                    //startActivity(i);
-                    //getSupportFragmentManager().beginTransaction().add(R.id.container, new AppViewFragment()).commit();
                 }
                 Log.d("======MAX=====", "WORKING");
             }

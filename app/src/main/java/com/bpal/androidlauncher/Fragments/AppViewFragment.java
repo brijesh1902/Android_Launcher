@@ -1,5 +1,7 @@
 package com.bpal.androidlauncher.Fragments;
 
+import static android.app.Activity.RESULT_OK;
+
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.ActivityManager;
@@ -72,7 +74,7 @@ public class AppViewFragment extends Fragment {
         try {
             view = inflater.inflate(R.layout.fragment_app_view, container, false);
 
-            WindowManager wm = (WindowManager) getContext().getSystemService(Context.WINDOW_SERVICE);
+            /*WindowManager wm = (WindowManager) getContext().getSystemService(Context.WINDOW_SERVICE);
             DisplayMetrics metrics = new DisplayMetrics();
             wm.getDefaultDisplay().getMetrics(metrics);
 
@@ -102,7 +104,6 @@ public class AppViewFragment extends Fragment {
             mOptions = getActivityOptions(MainActivity.this);
             mOptions = mOptions.setLaunchBounds(mBounds);*/
 
-            startActivity(i);
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -111,6 +112,58 @@ public class AppViewFragment extends Fragment {
         return view;
     }
 
+
+    private void requestOverlayDisplayPermission() {
+        // An AlertDialog is created
+        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+
+        // This dialog can be closed, just by taping
+        // anywhere outside the dialog-box
+        builder.setCancelable(true);
+
+        // The title of the Dialog-box is set
+        builder.setTitle("Screen Overlay Permission Needed");
+
+        // The message of the Dialog-box is set
+        builder.setMessage("Enable 'Display over other apps' from System Settings.");
+
+        // The event of the Positive-Button is set
+        builder.setPositiveButton("Open Settings", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                // The app will redirect to the 'Display over other apps' in Settings.
+                // This is an Implicit Intent. This is needed when any Action is needed
+                // to perform, here it is
+                // redirecting to an other app(Settings).
+                Intent intent = new Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION, Uri.parse("package:" + appInfo.getPackageName()));
+
+                // This method will start the intent. It takes two parameter, one is the Intent and the other is
+                // an requestCode Integer. Here it is -1.
+                startActivityForResult(intent, RESULT_OK);
+            }
+        });
+        dialog = builder.create();
+        // The Dialog will
+        // show in the screen
+        dialog.show();
+    }
+
+    private boolean checkOverlayDisplayPermission() {
+        // Android Version is lesser than Marshmallow or
+        // the API is lesser than 23
+        // doesn't need 'Display over other apps' permission enabling.
+        if (Build.VERSION.SDK_INT > Build.VERSION_CODES.M) {
+            // If 'Display over other apps' is not enabled
+            // it will return false or else true
+            if (!Settings.canDrawOverlays(getContext())) {
+                return false;
+            } else {
+                return true;
+            }
+        } else {
+            return true;
+        }
+    }
 
     @RequiresApi(api = Build.VERSION_CODES.M)
     public static ActivityOptions getActivityOptions(Context context) {

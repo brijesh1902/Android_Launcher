@@ -1,40 +1,29 @@
 package com.bpal.androidlauncher;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.cardview.widget.CardView;
 
-import android.app.Service;
-import android.content.Context;
 import android.content.Intent;
-import android.content.pm.PackageManager;
-import android.os.Build;
 import android.os.Bundle;
-import android.os.IBinder;
-import android.util.Log;
-import android.view.Gravity;
-import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
-import android.view.ViewGroup;
-import android.view.WindowManager;
 import android.widget.ImageView;
-import android.widget.TextView;
-import android.widget.Toast;
 
-import com.bpal.androidlauncher.Constant.Common;
-import com.bpal.androidlauncher.Fragments.HomeFragment;
-import com.bpal.androidlauncher.Model.AppInfo;
 import com.bpal.androidlauncher.SubClass.AppsDrawer;
 
 public class MainActivity extends AppCompatActivity {
 
     ImageView appDrawer;
+    CardView cardView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        /*appDrawer = findViewById(R.id.icon_drawer);
+        appDrawer = findViewById(R.id.icon_drawer);
+        cardView = findViewById(R.id.dcard);
+
+        cardView.setVisibility(View.VISIBLE);
 
         appDrawer.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -42,10 +31,9 @@ public class MainActivity extends AppCompatActivity {
                 Intent intent = new Intent(getApplicationContext(), AppsDrawer.class);
                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                 startActivity(intent);
+                cardView.setVisibility(View.INVISIBLE);
             }
-        });*/
-
-        getSupportFragmentManager().beginTransaction().add(R.id.container, new HomeFragment()).commit();
+        });
 
     }
 
