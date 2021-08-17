@@ -12,6 +12,7 @@ import androidx.core.content.ContextCompat;
 
 import android.Manifest;
 import android.app.ActivityOptions;
+import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
@@ -47,7 +48,7 @@ import com.bpal.androidlauncher.Services.HUD;
 public class WindowsAppsActivity extends AppCompatActivity {
 
     TextView app_name;
-    CardView max, min, close;
+    private CardView max, min, close, cardView;
     FrameLayout frameLayout;
     AppInfo appInfo = Common.current_app;
     public final static int REQUEST_CODE = -1010101;
@@ -55,14 +56,14 @@ public class WindowsAppsActivity extends AppCompatActivity {
     Display targetDisplay;
     WindowManager windowManager;
     View view;
-
+    PackageManager packageManager;
 
     @Override
     public void onMultiWindowModeChanged(boolean isInMultiWindowMode) {
         super.onMultiWindowModeChanged(isInMultiWindowMode);
 
         if (isInMultiWindowMode) {
-            // Activity has entered multi-window mode
+
         } else {
             // Activity has exited multi-window mode
         }
@@ -83,11 +84,11 @@ public class WindowsAppsActivity extends AppCompatActivity {
         Context displayContext = getApplicationContext().createDisplayContext(targetDisplay);
         windowManager = (WindowManager) displayContext.getSystemService(Context.WINDOW_SERVICE);
 
-//Get the WindowManager of display and LayoutInflater through displayContext
+        //Get the WindowManager of display and LayoutInflater through displayContext
         LayoutInflater li = (LayoutInflater) displayContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
-//Set up Layout and WindowParams
-        view = li.inflate(view_window, null, false);
+        //Set up Layout and WindowParams
+        view = li.inflate(R.layout.view_window, null);
 
         WindowManager.LayoutParams params = new WindowManager.LayoutParams();
         params.width = WindowManager.LayoutParams.MATCH_PARENT;
@@ -96,7 +97,8 @@ public class WindowsAppsActivity extends AppCompatActivity {
         params.type = WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY;
         params.flags |= WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE;
         params.gravity = Gravity.TOP;
-//Add view in WindowManager
+
+        //Add view in WindowManager
         windowManager.addView(view, params);
 
         /*DisplayMetrics displaymetrics = new DisplayMetrics();
@@ -110,39 +112,38 @@ public class WindowsAppsActivity extends AppCompatActivity {
         int width = size.x - 20;  // Set your heights
         int height = size.y - 80;
 
-
-
-        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N) {
-            PackageManager packageManager = getApplicationContext().getPackageManager();
-            Intent i = packageManager.getLaunchIntentForPackage(appInfo.getPackageName().toString());
-            Rect rect = new Rect(100, 800, 900, 700);
-            ActivityOptions options = ActivityOptions.makeBasic();
-            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
-                ActivityOptions bounds = options.setLaunchDisplayId(targetDisplay.getDisplayId());
-                options = options.setLaunchBounds(rect);
-
-                //startActivity(i, bounds.toBundle());
-                startActivity(i, options.toBundle());
-            }
-
-        }
-
+        packageManager = getApplicationContext().getPackageManager();
 
         max = view.findViewById(R.id.app_max);
         min = view.findViewById(R.id.app_min);
         close = view.findViewById(R.id.app_close);
         app_name = view.findViewById(R.id.app_name);
+        cardView = view.findViewById(R.id.cardView);
 
         app_name.setText(appInfo.getLabel());
+
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N) {
+            Intent i = packageManager.getLaunchIntentForPackage(appInfo.getPackageName().toString());
+            i.addFlags(Intent.FLAG_ACTIVITY_LAUNCH_ADJACENT | Intent.FLAG_ACTIVITY_MULTIPLE_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+            Rect rect = new Rect(100, 800, 900, 700);
+            ActivityOptions options = ActivityOptions.makeBasic();
+            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+                ActivityOptions bounds = options.setLaunchDisplayId(targetDisplay.getDisplayId());
+                options = options.setLaunchBounds(rect);
+                startActivity(i, options.toBundle());
+                //startActivity(i);
+            }
+
+        }
 
         close.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(getApplicationContext(), MainActivity.class);
-                intent.addFlags( Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                intent.addFlags( Intent.FLAG_ACTIVITY_NEW_TASK );
                 startActivity(intent);
-                windowManager.removeView(view);
-                view = null;
+                cardView.setVisibility(View.GONE);
+                //((WindowManager) getApplicationContext().getSystemService(Service.WINDOW_SERVICE)).removeView(view);
                 Common.showToast(getApplicationContext(), "App Closed.");
                 Log.d("======CLOSE=====", "WORKING");
                 appInfo = null;
@@ -163,14 +164,17 @@ public class WindowsAppsActivity extends AppCompatActivity {
         max.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+
                 if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N) {
-                    PackageManager packageManager = getApplicationContext().getPackageManager();
-                    Intent i = packageManager.getLaunchIntentForPackage(Common.current_app.getPackageName().toString());
+                    Intent i = packageManager.getLaunchIntentForPackage(appInfo.getPackageName().toString());
+                    i.addFlags(Intent.FLAG_ACTIVITY_LAUNCH_ADJACENT | Intent.FLAG_ACTIVITY_MULTIPLE_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
                     Rect rect = new Rect(100, 800, 900, 700);
                     ActivityOptions options = ActivityOptions.makeBasic();
                     if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
                         ActivityOptions bounds = options.setLaunchDisplayId(targetDisplay.getDisplayId());
-                        startActivity(i, bounds.toBundle());
+                        options = options.setLaunchBounds(rect);
+                        startActivity(i, options.toBundle());
+                        //startActivity(i);
                     }
                     Common.showToast(getApplicationContext(), "App Maximised.");
                 }

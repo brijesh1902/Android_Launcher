@@ -12,8 +12,8 @@ import com.bpal.androidlauncher.SubClass.AppsDrawer;
 
 public class MainActivity extends AppCompatActivity {
 
-    ImageView appDrawer;
-    CardView cardView;
+    private ImageView appDrawer;
+    private CardView cardView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
