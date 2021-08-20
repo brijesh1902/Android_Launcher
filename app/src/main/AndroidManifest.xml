@@ -4,8 +4,6 @@
     package="com.bpal.androidlauncher" >
 
     <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW"/>
-    <uses-permission android:name="android.permission.INTERNAL_SYSTEM_WINDOW"
-        tools:ignore="ProtectedPermissions" />
 
     <uses-configuration android:reqTouchScreen="finger" />
 
@@ -39,7 +37,7 @@
             </intent-filter>
         </activity>
 
-        <service android:name=".Services.HUD" android:exported="true" android:enabled="true" />
+        <service android:name=".Services.WindowView" android:exported="true" android:enabled="true" />
 
     </application>
 

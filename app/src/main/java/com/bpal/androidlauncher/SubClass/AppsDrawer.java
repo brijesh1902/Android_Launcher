@@ -9,13 +9,16 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.pm.ResolveInfo;
 import android.icu.text.Collator;
+import android.net.Uri;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.widget.EditText;
 import android.widget.Toast;
 
 import com.bpal.androidlauncher.Adapters.AppsDrawerAdapter;
+import com.bpal.androidlauncher.MainActivity;
 import com.bpal.androidlauncher.Model.AppInfo;
 import com.bpal.androidlauncher.R;
 
@@ -31,10 +34,14 @@ public class AppsDrawer extends AppCompatActivity {
     List<AppInfo> appsList;
     RecyclerView.LayoutManager layoutManager;
     EditText searchbar;
+    byte[] icon;
 
     @Override
     public void onBackPressed() {
         super.onBackPressed();
+        Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+        intent.addFlags( Intent.FLAG_ACTIVITY_NEW_TASK );
+        startActivity(intent);
         finish();
     }
 
@@ -111,7 +118,8 @@ public class AppsDrawer extends AppCompatActivity {
             AppInfo app = new AppInfo();
             app.setLabel(ri.loadLabel(packageManager));
             app.setPackageName(ri.activityInfo.packageName);
-            app.setIcon(ri.activityInfo.loadIcon(packageManager));
+            app.setIcon(ri.activityInfo.loadIcon(packageManager).toString());
+            System.out.println(ri.activityInfo.loadIcon(packageManager));
             appsList.add(app);
         }
     }

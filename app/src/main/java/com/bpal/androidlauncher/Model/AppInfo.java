@@ -6,7 +6,15 @@ public class AppInfo {
 
     CharSequence label;
     CharSequence packageName;
-    Drawable icon;
+    String icon;
+
+    public AppInfo(){}
+
+    public AppInfo(CharSequence label, String icon, CharSequence packageName) {
+        this.label = label;
+        this.icon =  icon;
+        this.packageName = packageName;
+    }
 
     public CharSequence getLabel() {
         return label;
@@ -24,11 +32,11 @@ public class AppInfo {
         this.packageName = packageName;
     }
 
-    public Drawable getIcon() {
-        return icon;
+    public void setIcon(String icon) {
+        this.icon = icon;
     }
 
-    public void setIcon(Drawable icon) {
-        this.icon = icon;
+    public String getIcon() {
+        return icon;
     }
 }
