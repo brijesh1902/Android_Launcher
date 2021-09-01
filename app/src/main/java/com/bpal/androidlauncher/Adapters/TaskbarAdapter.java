@@ -82,9 +82,6 @@ public class TaskbarAdapter extends RecyclerView.Adapter<TaskbarAdapter.ViewHold
                         }
                         Common.showToast(context, "App Maximised.");
                     }
-                    Intent intent = new Intent(context, WindowView.class);
-                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                    context.startService(intent);
                 }
             });
         }
