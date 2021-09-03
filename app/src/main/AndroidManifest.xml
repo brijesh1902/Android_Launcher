@@ -17,13 +17,13 @@
         android:stateNotNeeded="true"
         android:supportsRtl="true"
         android:resizeableActivity="true"
+        android:supportsPictureInPicture="true"
         android:theme="@style/Theme.AndroidLauncher" >
         <activity
             android:name=".SubClass.WindowsAppsActivity"
             android:configChanges="orientation|screenSize|smallestScreenSize|density|screenLayout|uiMode|keyboard|keyboardHidden|navigation"
             android:exported="true"
             />
-        <activity android:name=".SubClass.AppsDrawer" />
         <activity
             android:name=".MainActivity"
             >

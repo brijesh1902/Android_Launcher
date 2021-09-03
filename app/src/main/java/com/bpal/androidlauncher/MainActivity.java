@@ -4,7 +4,6 @@ import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
 import androidx.constraintlayout.widget.ConstraintLayout;
-import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -30,7 +29,6 @@ import com.bpal.androidlauncher.Adapters.TaskbarAdapter;
 import com.bpal.androidlauncher.Constant.Common;
 import com.bpal.androidlauncher.Database.DBTask;
 import com.bpal.androidlauncher.Model.AppInfo;
-import com.bpal.androidlauncher.SubClass.AppsDrawer;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -51,7 +49,6 @@ public class MainActivity extends AppCompatActivity {
     List<AppInfo> appsList;
     RecyclerView.LayoutManager layoutManager;
     EditText searchbar;
-    byte[] icon;
     ConstraintLayout menu_layout, parent;
 
     @Override
@@ -89,7 +86,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        checkDrawOverlayPermission();
+        checkDrawOverlayPermission(); // permission for app overlay
 
         data = new DBTask(getApplicationContext());
 
@@ -100,6 +97,7 @@ public class MainActivity extends AppCompatActivity {
         menu_layout = findViewById(R.id.menu_layout);
         parent = findViewById(R.id.parent);
 
+        // To close Menu list on left side by clicking on screen
         parent.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -118,12 +116,6 @@ public class MainActivity extends AppCompatActivity {
                 menu_layout.setVisibility(View.GONE);
             }
         });
-        appDrawer.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                menu_layout.setVisibility(View.GONE);
-            }
-        });
 
         cardView1.setCardBackgroundColor(Color.TRANSPARENT);
 
@@ -132,8 +124,8 @@ public class MainActivity extends AppCompatActivity {
         getRecyclerView.setLayoutManager(layoutManager1);
 
         cardView.setVisibility(View.VISIBLE);
-        menu_layout.setVisibility(View.GONE);
 
+        // getting left side window menu visible on clicking appDrawer
         appDrawer.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -141,20 +133,21 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-      // try {
-           list = data.get_tbApps();
-           Common.tb_list = list;
-        taskbarAdapter = new TaskbarAdapter(getApplicationContext(), list);
+        // getting list of apps stored from DB in list
+        list = data.get_tbApps();
+        Common.tb_list = list;  // setting app list data to common list
+        taskbarAdapter = new TaskbarAdapter(getApplicationContext(), list);  // setting adapter for taskbar
         taskbarAdapter.notifyDataSetChanged();
         taskbarAdapter.notifyItemInserted(taskbarAdapter.getItemCount());
         taskbarAdapter.notifyItemRemoved(taskbarAdapter.getItemCount());
         taskbarAdapter.notifyItemRangeChanged(taskbarAdapter.getItemCount(), list.size());
         getRecyclerView.setAdapter(taskbarAdapter);
-      // } catch (Exception e){}
+
 
         recyclerView = findViewById(R.id.appDrawer_recylerView);
         searchbar = findViewById(R.id.search);
 
+        // search bar for apps in menu list
         searchbar.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -175,12 +168,13 @@ public class MainActivity extends AppCompatActivity {
         layoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(layoutManager);
 
-        setUpApps();
+        setUpApps(); // getting all package apps from device in a list
 
+        // setting adapter for menu list of package apps
         adapter = new AppsDrawerAdapter(getApplicationContext(), appsList);
         adapter.notifyDataSetChanged();
         recyclerView.setAdapter(adapter);
-        Collections.sort(appsList, ALPHA_COMPARATOR);
+        Collections.sort(appsList, ALPHA_COMPARATOR); // sort by ALPHABATICAL order
     }
 
     @Override

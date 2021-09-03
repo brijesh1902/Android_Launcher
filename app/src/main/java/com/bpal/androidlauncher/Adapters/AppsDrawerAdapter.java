@@ -70,9 +70,9 @@ public class AppsDrawerAdapter extends RecyclerView.Adapter<AppsDrawerAdapter.Vi
                         Intent.FLAG_ACTIVITY_NEW_TASK);
                 context.startActivity(intent);
 
-                Intent intent1 = new Intent(context, WindowView.class);
+                /*Intent intent1 = new Intent(context, WindowView.class);
                 intent1.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                context.startService(intent1);
+                context.startService(intent1);*/
             }
         });
     }

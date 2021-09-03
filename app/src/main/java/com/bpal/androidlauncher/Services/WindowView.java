@@ -1,16 +1,19 @@
 package com.bpal.androidlauncher.Services;
 
 import android.app.ActivityOptions;
+import android.app.PictureInPictureParams;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.content.pm.PackageManager;
+import android.graphics.Point;
 import android.graphics.Rect;
 import android.hardware.display.DisplayManager;
 import android.os.Build;
 import android.os.IBinder;
 import android.util.Log;
+import android.util.Rational;
 import android.view.Display;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -20,6 +23,7 @@ import android.widget.FrameLayout;
 import android.widget.TextView;
 
 import androidx.annotation.Nullable;
+import androidx.annotation.RequiresApi;
 import androidx.cardview.widget.CardView;
 
 import com.bpal.androidlauncher.Constant.Common;
@@ -45,6 +49,7 @@ public class WindowView extends Service {
     int LAYOUT_FLAG;
     boolean exist;
     ArrayList<AppInfo> list = Common.tb_list;
+    private WindowView mApplication;
 
     @Nullable
     @Override
@@ -142,6 +147,22 @@ public class WindowView extends Service {
         max.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                Display d = windowManager.getDefaultDisplay();
+                Point point = new Point();
+                d.getSize(point);
+                int width = point.x;
+                int height = point.y;
+
+                /*if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+                    Rational rational = new Rational(width, height);
+                    PictureInPictureParams.Builder pip = new PictureInPictureParams.Builder();
+                    pip.setAspectRatio(rational).build();
+                    this.enterPictureInPictureMode(pip.build());
+                    /*PictureInPictureParams params = new PictureInPictureParams.Builder()
+                            .setAspectRatio(rational)
+                            .build();
+                    getApplicationContext().setPictureInPictureParams(params);*/
+                //}
                 Common.showToast(getApplicationContext(), "App Maximised.");
                 Log.d("======MAX=====", "WORKING");
             }

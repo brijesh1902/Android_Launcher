@@ -67,7 +67,7 @@ public class TaskbarAdapter extends RecyclerView.Adapter<TaskbarAdapter.ViewHold
             holder.setItemClickListener(new ItemClickListener() {
                 @Override
                 public void onItemClickListener(View v, int position) {
-                    if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N) {
+                   /* if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.N) {
                         Intent i = packageManager.getLaunchIntentForPackage(appPackage);
                         i.addFlags(Intent.FLAG_ACTIVITY_LAUNCH_ADJACENT | Intent.FLAG_ACTIVITY_MULTIPLE_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
                         Rect rect = new Rect(100, 800, 900, 700);
@@ -76,12 +76,21 @@ public class TaskbarAdapter extends RecyclerView.Adapter<TaskbarAdapter.ViewHold
                             options = options.setLaunchBounds(rect);
                             context.startActivity(i, options.toBundle());
                             Common.current_app = data;
-                            Intent intent1 = new Intent(context, WindowView.class);
+                            Intent intent1 = new Intent(context, WindowView.c
+
+
+                            lass);
                             intent1.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                             context.startService(intent1);
                         }
-                        Common.showToast(context, "App Maximised.");
-                    }
+                    }*/
+                    Common.current_app = data;
+                    Intent intent = new Intent(context, WindowsAppsActivity.class);
+                    intent.addFlags(Intent.FLAG_ACTIVITY_LAUNCH_ADJACENT|
+                            Intent.FLAG_ACTIVITY_MULTIPLE_TASK|
+                            Intent.FLAG_ACTIVITY_NEW_TASK);
+                    context.startActivity(intent);
+                    Common.showToast(context, "App Maximised.");
                 }
             });
         }
