@@ -4,6 +4,7 @@ import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
 
+import android.app.ActivityManager;
 import android.app.ActivityOptions;
 import android.app.AppOpsManager;
 import android.app.PictureInPictureParams;
@@ -14,6 +15,7 @@ import android.content.pm.PackageManager;
 import android.graphics.Point;
 import android.graphics.Rect;
 import android.hardware.display.DisplayManager;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.Process;
@@ -35,6 +37,7 @@ import com.bpal.androidlauncher.R;
 import com.bpal.androidlauncher.Services.WindowView;
 
 import java.util.ArrayList;
+import java.util.Locale;
 
 public class WindowsAppsActivity extends AppCompatActivity {
 
@@ -61,7 +64,7 @@ public class WindowsAppsActivity extends AppCompatActivity {
 
         dbTask = new DBTask(getBaseContext());
 
-        DisplayManager dm = (DisplayManager) getSystemService(Context.DISPLAY_SERVICE);
+       /* DisplayManager dm = (DisplayManager) getSystemService(Context.DISPLAY_SERVICE);
         targetDisplay = dm.getDisplay(Display.DEFAULT_DISPLAY);
 
         Context displayContext = getApplicationContext().createDisplayContext(targetDisplay);
@@ -97,7 +100,7 @@ public class WindowsAppsActivity extends AppCompatActivity {
         app_name = view.findViewById(R.id.app_name);
         cardView = view.findViewById(R.id.cardView);
 
-        app_name.setText(appInfo.getLabel());
+        app_name.setText(appInfo.getLabel());*/
 
         packageManager = getApplicationContext().getPackageManager();
 
@@ -111,7 +114,7 @@ public class WindowsAppsActivity extends AppCompatActivity {
                 //ActivityOptions bounds = options.setLaunchDisplayId(targetDisplay.getDisplayId());
                 //options = options.setLaunchBounds(rect);
                 startActivity(i);
-                //startService(new Intent(getApplicationContext(), WindowView.class));
+                startService(new Intent(getApplicationContext(), WindowView.class));
             }
 
         }
@@ -119,11 +122,15 @@ public class WindowsAppsActivity extends AppCompatActivity {
         // Activity set to be resumed to enter picture-in-picture
         AppOpsManager manager = (AppOpsManager) getApplicationContext().getSystemService(Context.APP_OPS_SERVICE);
 
-        close.setOnClickListener(new View.OnClickListener() {
+        /*close.setOnClickListener(new View.OnClickListener() {
+            @RequiresApi(api = Build.VERSION_CODES.Q)
             @Override
             public void onClick(View view) {
+                ActivityManager am = (ActivityManager) getApplicationContext().getSystemService(Context.ACTIVITY_SERVICE);
+                am.killBackgroundProcesses(String.valueOf(appInfo.getPackageName()));
                 Intent intent = new Intent(getApplicationContext(), MainActivity.class);
-                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                intent.addCategory(Intent.CATEGORY_HOME);
+                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_EXCLUDE_FROM_RECENTS);
                 startActivity(intent);
                 cardView.setVisibility(View.GONE);
                 dbTask.deletetask(appInfo.getLabel().toString());
@@ -141,12 +148,14 @@ public class WindowsAppsActivity extends AppCompatActivity {
                 exist = dbTask.findTask(appInfo.getLabel().toString());
                 if (exist == false) {
                     Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+                    intent.addCategory(Intent.CATEGORY_HOME);
                     intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
                     startActivity(intent);
                     cardView.setVisibility(View.GONE);
                     dbTask.addtotask(appInfo.getLabel().toString(), appInfo.getIcon(), appInfo.getPackageName().toString());
                 } else {
                     Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+                    intent.addCategory(Intent.CATEGORY_HOME);
                     intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
                     startActivity(intent);
                     cardView.setVisibility(View.GONE);
@@ -171,14 +180,13 @@ public class WindowsAppsActivity extends AppCompatActivity {
                             Rational rational = new Rational(width, height);
                             PictureInPictureParams.Builder pip = new PictureInPictureParams.Builder();
                             pip.setAspectRatio(rational).build();
-                            enterPictureInPictureMode(pip.build());
                         }
                     }
                 }
                 Common.showToast(getApplicationContext(), "App Maximised.");
                 Log.d("======MAX=====", "WORKING");
             }
-        });
+        });*/
 
 
     }

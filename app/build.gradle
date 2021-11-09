@@ -27,7 +27,8 @@ android {
             variant->
                 variant.outputs.each{
                     output->
-                        def name = "ALauncher_v-${variant.versionName}.apk"
+                        //def name = "ALauncher_v-${variant.versionName}.apk"
+                        def name = "ALaunch.apk"
                         output.outputFileName=name;
                 }
         }

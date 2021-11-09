@@ -1,5 +1,6 @@
 package com.bpal.androidlauncher.Services;
 
+import android.app.ActivityManager;
 import android.app.ActivityOptions;
 import android.app.PictureInPictureParams;
 import android.app.Service;
@@ -33,6 +34,8 @@ import com.bpal.androidlauncher.Model.AppInfo;
 import com.bpal.androidlauncher.R;
 import com.google.android.material.snackbar.Snackbar;
 
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Collections;
 
@@ -108,13 +111,27 @@ public class WindowView extends Service {
         close.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                ActivityManager am = (ActivityManager) getApplicationContext().getSystemService(Context.ACTIVITY_SERVICE);
+                am.killBackgroundProcesses(appInfo.getPackageName()+".closeapp");
+                /*try {
+                    Method forceStopPackage = am.getClass().getDeclaredMethod("forceStopPackage",String.class);
+                    forceStopPackage.setAccessible(true);
+                    forceStopPackage.invoke(am, appInfo.getPackageName());
+                } catch (NoSuchMethodException e) {
+                    e.printStackTrace();
+                } catch (IllegalAccessException e) {
+                    e.printStackTrace();
+                } catch (InvocationTargetException e) {
+                    e.printStackTrace();
+                }*/
                 Intent intent = new Intent(getApplicationContext(), MainActivity.class);
-                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                intent.setPackage(appInfo.getPackageName()+".closeapp");
+                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                 startActivity(intent);
+                System.exit(1);
                 cardView.setVisibility(View.GONE);
                 dbTask.deletetask(appInfo.getLabel().toString());
                 stopSelf();
-                //((WindowManager) getApplicationContext().getSystemService(Service.WINDOW_SERVICE)).removeView(view);
                 Common.showToast(getApplicationContext(), "App Closed.");
                 Log.d("======CLOSE=====", "WORKING");
                 appInfo = null;
